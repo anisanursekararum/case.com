@@ -1,0 +1,181 @@
+### AUTHENTICATION ###
+
+### 📥 MEMBER'S REGISTER ###
+POST http://localhost:5000/api/auth/register
+Content-Type: application/json
+
+{
+  "name": "admin tiga",
+  "email": "admin3@case.com",
+  "password": "admin123"
+}
+
+### ✅ MEMBER'S LOGIN ###
+POST http://localhost:5000/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "member0@case.com",
+  "password": "member123"
+}
+
+
+### ✅ ADMIN'S LOGIN ###
+POST http://localhost:5000/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin3@case.com",
+  "password": "admin123"
+}
+###
+
+### TEAMS ###
+
+### TEAM REQUESTS ###
+
+### Member: Request Join Team
+POST http://localhost:5000/api/teams/request-join-team
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTEsImVtYWlsIjoibWVtYmVyOEBjYXNlLmNvbSIsInJvbGUiOiJtZW1iZXIiLCJpYXQiOjE3NTIyMzc3MDUsImV4cCI6MTc1MjMyNDEwNX0.Efehxh3O-2-QP_r0KsFl6KAI7-qvydwBqb4n_twcWtA
+
+{
+  "team_code": "TEAMY6E8MV"
+}
+
+### Member: Request Create Team
+POST http://localhost:5000/api/teams/request-create-team
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTEsImVtYWlsIjoibWVtYmVyOEBjYXNlLmNvbSIsInJvbGUiOiJtZW1iZXIiLCJpYXQiOjE3NTIyMzc3MDUsImV4cCI6MTc1MjMyNDEwNX0.Efehxh3O-2-QP_r0KsFl6KAI7-qvydwBqb4n_twcWtA
+
+{
+  "team_name": "Team QA 4",
+  "description": "Deskripsi team QA baru keempat"
+}
+
+
+### Admin: Get All Pending Join Requests
+GET http://localhost:5000/api/teams/request-join-team/pending
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTUsImVtYWlsIjoiYWRtaW4zQGNhc2UuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzUyMjM3Njc5LCJleHAiOjE3NTIzMjQwNzl9.KafjTJMCSvECzAtFlH8k6PyOS0nImfks2n3MpAsNf7o
+
+### Admin: Get All Pending Team
+GET http://localhost:5000/api/teams/request-new-team/pending
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTUsImVtYWlsIjoiYWRtaW4zQGNhc2UuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzUyMjM3Njc5LCJleHAiOjE3NTIzMjQwNzl9.KafjTJMCSvECzAtFlH8k6PyOS0nImfks2n3MpAsNf7o
+
+
+### Admin: Decide Join Request
+PATCH http://localhost:5000/api/teams/request-join-team/6/decide
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTUsImVtYWlsIjoiYWRtaW4zQGNhc2UuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzUyMjM3Njc5LCJleHAiOjE3NTIzMjQwNzl9.KafjTJMCSvECzAtFlH8k6PyOS0nImfks2n3MpAsNf7o
+
+{
+  "decision": "approved"
+}
+
+### Admin: Decide Team Creation Request
+PATCH http://localhost:5000/api/teams/request-new-team/2/decide
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTUsImVtYWlsIjoiYWRtaW4zQGNhc2UuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzUyMjM3Njc5LCJleHAiOjE3NTIzMjQwNzl9.KafjTJMCSvECzAtFlH8k6PyOS0nImfks2n3MpAsNf7o
+
+{
+  "decision": "declined"
+}
+
+### GET CURRENT USER LOGIN ###
+GET http://localhost:5000/api/auth/me
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTEsImVtYWlsIjoibWVtYmVyOEBjYXNlLmNvbSIsInJvbGUiOiJtZW1iZXIiLCJpYXQiOjE3NTIyMzc3MDUsImV4cCI6MTc1MjMyNDEwNX0.Efehxh3O-2-QP_r0KsFl6KAI7-qvydwBqb4n_twcWtA
+x-active-team: 6
+###
+GET http://localhost:5000/api/auth/me
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTEsImVtYWlsIjoibWVtYmVyOEBjYXNlLmNvbSIsInJvbGUiOiJtZW1iZXIiLCJpYXQiOjE3NTIzMjI2NjgsImV4cCI6MTc1MjQwOTA2OH0.LShHB7Dm9VnBqVp1U_9PApLv7HrLjNWB2AhTF2dWGBE
+
+### GET DETAIL TEAM ###
+GET http://localhost:5000/api/teams/1/detail
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTEsImVtYWlsIjoibWVtYmVyOEBjYXNlLmNvbSIsInJvbGUiOiJtZW1iZXIiLCJpYXQiOjE3NTIyMzc3MDUsImV4cCI6MTc1MjMyNDEwNX0.Efehxh3O-2-QP_r0KsFl6KAI7-qvydwBqb4n_twcWtA
+x-active-team: 6
+
+###
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+### TEST SUITES ###
+
+###
+
+GET http://localhost:5000/api/test-suites
+
+###
+GET http://localhost:5000/api/test-suites/1
+
+###
+POST http://localhost:5000/api/test-suites
+Content-Type: application/json
+
+{
+  "suite_name": "Customer",
+  "suite_code": "kopST",
+  "description": "test suite untuk seluruh customer"
+}
+
+###
+PATCH http://localhost:5000/api/test-suites/11
+Content-Type: application/json
+
+{
+  "suite_name": "Customer",
+  "suite_code": "kopST",
+  "description": "test suite customer [UPDATED]"
+}
+
+###
+DELETE http://localhost:5000/api/test-suites/3
+
+

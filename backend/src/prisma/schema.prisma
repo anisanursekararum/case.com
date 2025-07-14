@@ -1,0 +1,303 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model roles {
+  id    Int        @id @default(autoincrement())
+  role  roles_role
+  users users[]
+}
+
+model test_cases {
+  id                                 Int               @id @default(autoincrement())
+  test_case_number                   String?           @db.VarChar(100)
+  title                              String?           @db.VarChar(255)
+  module_id                          Int?
+  pre_condition                      String?           @db.Text
+  test_data                          String?           @db.Text
+  test_steps                         String?           @db.Text
+  expected_result                    String?           @db.Text
+  flag                               test_cases_flag?
+  created_date_time                  DateTime?         @default(now()) @db.DateTime(0)
+  updated_date_time                  DateTime?         @default(now()) @db.DateTime(0)
+  created_by                         Int?
+  updated_by                         Int?
+  test_modules                       test_modules?     @relation(fields: [module_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "test_cases_ibfk_1")
+  users_test_cases_created_byTousers users?            @relation("test_cases_created_byTousers", fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "test_cases_ibfk_2")
+  users_test_cases_updated_byTousers users?            @relation("test_cases_updated_byTousers", fields: [updated_by], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "test_cases_ibfk_3")
+  test_plan_cases                    test_plan_cases[]
+  test_run_cases                     test_run_cases[]
+
+  @@index([created_by], map: "created_by")
+  @@index([module_id], map: "module_id")
+  @@index([updated_by], map: "updated_by")
+}
+
+model test_modules {
+  id                                   Int          @id @default(autoincrement())
+  module_name                          String?      @db.VarChar(100)
+  suite_id                             Int?
+  description                          String?      @db.Text
+  created_date_time                    DateTime?    @default(now()) @db.DateTime(0)
+  updated_date_time                    DateTime?    @default(now()) @db.DateTime(0)
+  created_by                           Int?
+  updated_by                           Int?
+  test_cases                           test_cases[]
+  test_suites                          test_suites? @relation(fields: [suite_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "test_modules_ibfk_1")
+  users_test_modules_created_byTousers users?       @relation("test_modules_created_byTousers", fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "test_modules_ibfk_2")
+  users_test_modules_updated_byTousers users?       @relation("test_modules_updated_byTousers", fields: [updated_by], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "test_modules_ibfk_3")
+
+  @@index([created_by], map: "created_by")
+  @@index([suite_id], map: "suite_id")
+  @@index([updated_by], map: "updated_by")
+}
+
+model test_plan_cases {
+  id           Int         @id @default(autoincrement())
+  test_plan_id Int?
+  test_case_id Int?
+  test_plans   test_plans? @relation(fields: [test_plan_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "test_plan_cases_ibfk_1")
+  test_cases   test_cases? @relation(fields: [test_case_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "test_plan_cases_ibfk_2")
+
+  @@index([test_case_id], map: "test_case_id")
+  @@index([test_plan_id], map: "test_plan_id")
+}
+
+model test_plans {
+  id                                 Int                @id @default(autoincrement())
+  test_plan_name                     String?            @db.VarChar(100)
+  description                        String?            @db.Text
+  estimated_start_testing            DateTime?          @db.DateTime(0)
+  estimated_end_testing              DateTime?          @db.DateTime(0)
+  status                             test_plans_status? @default(todo)
+  created_date_time                  DateTime?          @default(now()) @db.DateTime(0)
+  updated_date_time                  DateTime?          @default(now()) @db.DateTime(0)
+  created_by                         Int?
+  updated_by                         Int?
+  test_plan_cases                    test_plan_cases[]
+  users_test_plans_created_byTousers users?             @relation("test_plans_created_byTousers", fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "test_plans_ibfk_1")
+  users_test_plans_updated_byTousers users?             @relation("test_plans_updated_byTousers", fields: [updated_by], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "test_plans_ibfk_2")
+  test_run_cases                     test_run_cases[]
+  test_runs                          test_runs[]
+
+  @@index([created_by], map: "created_by")
+  @@index([updated_by], map: "updated_by")
+}
+
+model test_runs {
+  id                                Int               @id @default(autoincrement())
+  test_run_name                     String?           @db.VarChar(100)
+  description                       String?           @db.Text
+  test_platform                     String?           @db.VarChar(100)
+  environment                       String?           @db.VarChar(100)
+  actual_start_testing              DateTime?         @db.DateTime(0)
+  actual_end_testing                DateTime?         @db.DateTime(0)
+  test_plan_id                      Int?
+  qa_name                           String?           @db.VarChar(100)
+  status                            test_runs_status? @default(todo)
+  created_date_time                 DateTime?         @default(now()) @db.DateTime(0)
+  updated_date_time                 DateTime?         @default(now()) @db.DateTime(0)
+  created_by                        Int?
+  updated_by                        Int?
+  test_run_cases                    test_run_cases[]
+  test_plans                        test_plans?       @relation(fields: [test_plan_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "test_runs_ibfk_1")
+  users_test_runs_created_byTousers users?            @relation("test_runs_created_byTousers", fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "test_runs_ibfk_2")
+  users_test_runs_updated_byTousers users?            @relation("test_runs_updated_byTousers", fields: [updated_by], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "test_runs_ibfk_3")
+
+  @@index([created_by], map: "created_by")
+  @@index([test_plan_id], map: "test_plan_id")
+  @@index([updated_by], map: "updated_by")
+}
+
+model test_suites {
+  id                                  Int            @id @default(autoincrement())
+  suite_name                          String?        @db.VarChar(100)
+  suite_code                          String?        @unique(map: "suite_code") @db.VarChar(50)
+  description                         String?        @db.Text
+  created_date_time                   DateTime?      @default(now()) @db.DateTime(0)
+  updated_date_time                   DateTime?      @default(now()) @db.DateTime(0)
+  created_by                          Int?
+  updated_by                          Int?
+  test_modules                        test_modules[]
+  users_test_suites_created_byTousers users?         @relation("test_suites_created_byTousers", fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "test_suites_ibfk_1")
+  users_test_suites_updated_byTousers users?         @relation("test_suites_updated_byTousers", fields: [updated_by], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "test_suites_ibfk_2")
+
+  @@index([created_by], map: "created_by")
+  @@index([updated_by], map: "updated_by")
+}
+
+model users {
+  id                                             Int              @id @default(autoincrement())
+  name                                           String?          @db.VarChar(100)
+  email                                          String           @unique(map: "email") @db.VarChar(100)
+  password                                       String           @db.Text
+  roles_id                                       Int?
+  created_date_time                              DateTime?        @default(now()) @db.DateTime(0)
+  updated_date_time                              DateTime?        @default(now()) @db.DateTime(0)
+  created_by                                     Int?
+  updated_by                                     Int?
+  join_requests_join_requests_user_idTousers     join_requests[]  @relation("join_requests_user_idTousers")
+  join_requests_join_requests_requestorTousers   join_requests[]  @relation("join_requests_requestorTousers")
+  join_requests_join_requests_decided_byTousers  join_requests[]  @relation("join_requests_decided_byTousers")
+  team_requests_team_requests_decision_byTousers team_requests[]  @relation("team_requests_decision_byTousers")
+  team_requests_team_requests_requestorTousers   team_requests[]  @relation("team_requests_requestorTousers")
+  teams                                          teams[]
+  test_cases_test_cases_created_byTousers        test_cases[]     @relation("test_cases_created_byTousers")
+  test_cases_test_cases_updated_byTousers        test_cases[]     @relation("test_cases_updated_byTousers")
+  test_modules_test_modules_created_byTousers    test_modules[]   @relation("test_modules_created_byTousers")
+  test_modules_test_modules_updated_byTousers    test_modules[]   @relation("test_modules_updated_byTousers")
+  test_plans_test_plans_created_byTousers        test_plans[]     @relation("test_plans_created_byTousers")
+  test_plans_test_plans_updated_byTousers        test_plans[]     @relation("test_plans_updated_byTousers")
+  test_run_cases                                 test_run_cases[]
+  test_runs_test_runs_created_byTousers          test_runs[]      @relation("test_runs_created_byTousers")
+  test_runs_test_runs_updated_byTousers          test_runs[]      @relation("test_runs_updated_byTousers")
+  test_suites_test_suites_created_byTousers      test_suites[]    @relation("test_suites_created_byTousers")
+  test_suites_test_suites_updated_byTousers      test_suites[]    @relation("test_suites_updated_byTousers")
+  user_teams                                     user_teams[]
+  roles                                          roles?           @relation(fields: [roles_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "users_ibfk_1")
+  users_users_created_byTousers                  users?           @relation("users_created_byTousers", fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "users_ibfk_2")
+  other_users_users_created_byTousers            users[]          @relation("users_created_byTousers")
+  users_users_updated_byTousers                  users?           @relation("users_updated_byTousers", fields: [updated_by], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "users_ibfk_3")
+  other_users_users_updated_byTousers            users[]          @relation("users_updated_byTousers")
+
+  @@index([created_by], map: "created_by")
+  @@index([roles_id], map: "roles_id")
+  @@index([updated_by], map: "updated_by")
+}
+
+model test_run_cases {
+  id                Int                    @id @default(autoincrement())
+  test_run_id       Int?
+  test_plan_id      Int?
+  test_case_id      Int?
+  status            test_run_cases_status? @default(todo)
+  actual_result     String?                @db.Text
+  notes             String?                @db.Text
+  executed_by       Int?
+  started_at        DateTime?              @db.DateTime(0)
+  finished_at       DateTime?              @db.DateTime(0)
+  created_date_time DateTime?              @default(now()) @db.DateTime(0)
+  updated_date_time DateTime?              @default(now()) @db.DateTime(0)
+  test_runs         test_runs?             @relation(fields: [test_run_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "test_run_cases_ibfk_1")
+  test_plans        test_plans?            @relation(fields: [test_plan_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "test_run_cases_ibfk_2")
+  test_cases        test_cases?            @relation(fields: [test_case_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "test_run_cases_ibfk_3")
+  users             users?                 @relation(fields: [executed_by], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "test_run_cases_ibfk_4")
+
+  @@index([executed_by], map: "executed_by")
+  @@index([test_case_id], map: "test_case_id")
+  @@index([test_plan_id], map: "test_plan_id")
+  @@index([test_run_id], map: "test_run_id")
+}
+
+model join_requests {
+  id                                    Int                   @id @unique(map: "id_UNIQUE") @default(autoincrement())
+  user_id                               Int?
+  team_id                               Int?
+  status                                join_requests_status? @default(pending)
+  request_date                          DateTime?             @default(now()) @db.DateTime(0)
+  decision_date                         DateTime?             @db.DateTime(0)
+  decided_by                            Int?
+  requestor                             Int
+  users_join_requests_user_idTousers    users?                @relation("join_requests_user_idTousers", fields: [user_id], references: [id], map: "join_requests_ibfk_1")
+  users_join_requests_requestorTousers  users                 @relation("join_requests_requestorTousers", fields: [requestor], references: [id], onDelete: Cascade, map: "fk_requestor")
+  teams                                 teams?                @relation(fields: [team_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "join_requests_ibfk_2")
+  users_join_requests_decided_byTousers users?                @relation("join_requests_decided_byTousers", fields: [decided_by], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "join_requests_ibfk_3")
+
+  @@index([decided_by], map: "decided_by")
+  @@index([team_id], map: "team_id")
+  @@index([requestor], map: "requestor_idx")
+  @@index([user_id], map: "fk_join_requests_user_id")
+}
+
+model teams {
+  id                Int             @id @default(autoincrement())
+  team_name         String          @db.VarChar(100)
+  team_code         String          @unique(map: "team_code") @db.VarChar(20)
+  description       String?         @db.Text
+  created_by        Int?
+  created_date_time DateTime?       @default(now()) @db.DateTime(0)
+  join_requests     join_requests[]
+  users             users?          @relation(fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "teams_ibfk_1")
+  user_teams        user_teams[]
+
+  @@index([created_by], map: "created_by")
+}
+
+model user_teams {
+  id        Int       @id @default(autoincrement())
+  user_id   Int?
+  team_id   Int?
+  joined_at DateTime? @default(now()) @db.DateTime(0)
+  users     users?    @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "user_teams_ibfk_1")
+  teams     teams?    @relation(fields: [team_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "user_teams_ibfk_2")
+
+  @@index([team_id], map: "team_id")
+  @@index([user_id], map: "user_id")
+}
+
+model team_requests {
+  id                                     Int                  @id @default(autoincrement())
+  team_name                              String               @db.VarChar(255)
+  description                            String               @db.Text
+  status                                 team_requests_status @default(pending)
+  request_date                           DateTime             @default(now()) @db.DateTime(0)
+  decision_date                          DateTime?            @db.DateTime(0)
+  decision_by                            Int?
+  requestor                              Int
+  users_team_requests_decision_byTousers users?               @relation("team_requests_decision_byTousers", fields: [decision_by], references: [id], map: "fk_team_requests_decision_by")
+  users_team_requests_requestorTousers   users                @relation("team_requests_requestorTousers", fields: [requestor], references: [id], onDelete: Cascade, map: "fk_team_requests_requestor")
+
+  @@index([decision_by], map: "idx_team_requests_decision_by")
+  @@index([requestor], map: "idx_team_requests_requestor")
+  @@index([status], map: "idx_team_requests_status")
+}
+
+enum roles_role {
+  admin
+  member
+}
+
+enum test_cases_flag {
+  positive
+  negative
+}
+
+enum test_run_cases_status {
+  todo
+  in_progress
+  passed
+  failed
+  deferred
+  uncovered
+}
+
+enum test_plans_status {
+  todo
+  ongoing
+  done
+  postponed
+  cancelled
+}
+
+enum test_runs_status {
+  todo
+  in_progress
+  completed
+}
+
+enum join_requests_status {
+  pending
+  approved
+  declined
+}
+
+enum team_requests_status {
+  pending
+  approved
+  declined
+}

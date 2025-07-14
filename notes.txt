@@ -1,0 +1,38 @@
+frontend "npm start"
+backend "node index.js"
+backend "npm run dev"
+
+2
+
+credentials
+admin : admin2@case.com / admin123
+member :
+member3@case.com
+member sebelas
+member123
+
+gambar di login register https://storyset.com/illustration/team-spirit/cuate
+
+TODO LIST
+1. approval team
+2. approval join
+3. test suites
+
+background : gradient dari warna #111929 dan #788AFF
+
+
+member8 eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTEsImVtYWlsIjoibWVtYmVyOEBjYXNlLmNvbSIsInJvbGUiOiJtZW1iZXIiLCJpYXQiOjE3NTIyMzc3MDUsImV4cCI6MTc1MjMyNDEwNX0.Efehxh3O-2-QP_r0KsFl6KAI7-qvydwBqb4n_twcWtA
+
+admin3 eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTUsImVtYWlsIjoiYWRtaW4zQGNhc2UuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzUyMjM3Njc5LCJleHAiOjE3NTIzMjQwNzl9.KafjTJMCSvECzAtFlH8k6PyOS0nImfks2n3MpAsNf7o
+
+tagline : Test. Track. Triumph
+"Kami percaya bahwa kualitas bukan kebetulan, melainkan hasil dari proses yang terstruktur. Dengan menguji secara cerdas (Test), memantau secara real-time (Track), kami membantu tim mencapai keberhasilan (Triumph) dalam setiap siklus pengembangan."
+ Makna & Filosofi “Test. Track. Triumph.”
+Test
+Melambangkan fondasi dari proses kualitas — mendefinisikan dan menjalankan test case untuk memastikan software berjalan sesuai harapan.
+
+Track
+Menggambarkan kontrol dan visibilitas penuh terhadap semua test case, status, progres, dan hasil. Transparansi ini penting dalam kolaborasi tim dan pengambilan keputusan.
+
+Triumph
+Simbol dari hasil akhir — keberhasilan dalam menjaga kualitas, mempercepat release, dan membangun kepercayaan terhadap produk.
