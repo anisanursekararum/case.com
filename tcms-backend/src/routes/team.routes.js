@@ -2,21 +2,22 @@ import express from "express";
 import {
   requestJoinTeam,
   requestCreateTeam,
-  getPendingRequests,
+  getJoinRequests,
   getPendingTeam,
   decideJoinRequest,
   decideCreateTeamRequest,
-  getTeamDetail 
+  getTeamDetail,
+  getTeams,
 } from "../controllers/team.controller.js";
 import { protect } from "../middlewares/auth.middleware.js";
 import { authorizeRoles } from "../middlewares/role.middleware.js";
 
 const router = express.Router();
 
-//get team details
 router.get("/:id/detail", protect, getTeamDetail);
 
-//member request join ke team
+router.get("/teams/all", protect, authorizeRoles("admin"), getTeams);
+
 router.post(
   "/request-join-team",
   protect,
@@ -24,7 +25,6 @@ router.post(
   requestJoinTeam
 );
 
-//member request buat team BARU
 router.post(
   "/request-create-team",
   protect,
@@ -32,23 +32,20 @@ router.post(
   requestCreateTeam
 );
 
-//admin get semua data dari member yang request join team
 router.get(
-  "/request-join-team/pending",
+  "/request-join-team/all",
   protect,
   authorizeRoles("admin"),
-  getPendingRequests
+  getJoinRequests
 );
 
-//admin get semua data dari member yang request BUAT TEAM BARU
 router.get(
-  "/request-new-team/pending",
+  "/request-new-team/all",
   protect,
   authorizeRoles("admin"),
   getPendingTeam
 );
 
-//admin memutuskan approved or decline request member buat join team
 router.patch(
   "/request-join-team/:id/decide",
   protect,
@@ -56,7 +53,6 @@ router.patch(
   decideJoinRequest
 );
 
-//admin memutuskan approved or decline request member untuk NEW TEAM
 router.patch(
   "/request-new-team/:request_id/decide",
   protect,

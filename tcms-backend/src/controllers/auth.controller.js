@@ -1,5 +1,4 @@
 import { hash, compare } from "bcrypt";
-// import { sign } from "jsonwebtoken";
 import pkg from "jsonwebtoken";
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
@@ -10,11 +9,12 @@ export const register = async (req, res) => {
   try {
     const existingUser = await prisma.users.findUnique({ where: { email } });
     if (existingUser)
-      return res.status(400).json({ success: false, message: "Email already used" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Email already used" });
 
     const hashedPassword = await hash(password, 10);
 
-    // Ambil ID role 'member'
     const role = await prisma.roles.findFirst({ where: { role: "member" } });
 
     const user = await prisma.users.create({
@@ -34,7 +34,6 @@ export const register = async (req, res) => {
       },
     });
 
-    // Generate JWT token
     const token = sign(
       { id: user.id, email: user.email, role: user.roles.role },
       process.env.JWT_SECRET,
@@ -57,9 +56,11 @@ export const register = async (req, res) => {
       },
     });
   } catch (err) {
-    res
-      .status(500)
-      .json({ success: false, message: "Registration failed", error: err.message });
+    res.status(500).json({
+      success: false,
+      message: "Registration failed",
+      error: err.message,
+    });
   }
 };
 
@@ -71,11 +72,16 @@ export const login = async (req, res) => {
       include: { roles: true, user_teams: { include: { teams: true } } },
     });
 
-    if (!user) return res.status(404).json({ success: false, message: "User not found" });
+    if (!user)
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
 
     const validPassword = await compare(password, user.password);
     if (!validPassword)
-      return res.status(401).json({ success: false, message: "Invalid credentials" });
+      return res
+        .status(401)
+        .json({ success: false, message: "Invalid credentials" });
 
     const token = sign(
       { id: user.id, email: user.email, role: user.roles.role },
@@ -91,7 +97,7 @@ export const login = async (req, res) => {
         name: user.name,
         email: user.email,
         role: user.roles.role,
-        user_teams: user.user_teams, // frontend bisa cek jumlah, status
+        user_teams: user.user_teams,
       },
     });
   } catch (err) {
@@ -99,7 +105,6 @@ export const login = async (req, res) => {
   }
 };
 
-// GET /api/auth/me
 export const getCurrentUser = async (req, res) => {
   try {
     const activeTeamId = parseInt(req.headers["x-active-team"]);
