@@ -203,6 +203,7 @@ model join_requests {
   decision_date                         DateTime?             @db.DateTime(0)
   decided_by                            Int?
   requestor                             Int
+  reason                                String?               @db.Text
   users_join_requests_user_idTousers    users?                @relation("join_requests_user_idTousers", fields: [user_id], references: [id], map: "join_requests_ibfk_1")
   users_join_requests_requestorTousers  users                 @relation("join_requests_requestorTousers", fields: [requestor], references: [id], onDelete: Cascade, map: "fk_requestor")
   teams                                 teams?                @relation(fields: [team_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "join_requests_ibfk_2")
